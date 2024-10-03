@@ -128,7 +128,7 @@ static hypercube make_hypercube(unsigned dim, const double *center, const double
      hypercube h;
      h.dim = dim;
 #ifdef R_PACKAGE
-     h.data = (double *) R_R_Calloc(dim * 2, double);
+     h.data = (double *) R_Calloc(dim * 2, double);
 #else
      h.data = (double *) malloc(sizeof(double) * dim * 2);
 #endif
