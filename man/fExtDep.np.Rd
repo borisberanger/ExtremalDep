@@ -57,7 +57,7 @@ When \code{method="Empirical"}, the empirical estimation procedure presented in 
 Outputs take the form of list including:
   \describe{
   \item{method:}{The argument.}
-  \item{type:} whether it is \code{"maxima"} or \code{"rawdata"} (in the broader sense that a threshold exceedance model was taken).
+  \item{type:}{whether it is \code{"maxima"} or \code{"rawdata"} (in the broader sense that a threshold exceedance model was taken).}
   }
 If \code{method="Bayesian"} the list also includes:
   \describe{
@@ -91,7 +91,7 @@ When \code{method="Empirical"}, the list includes:
   \describe{
   \item{hhat:}{An estimate of the angular density.}
   \item{Hhat:}{An estimate of the angular measure.}
-  \item{p0}, p1:}{The estimates of the probability mass at 0 and 1.}
+  \item{p0, p1:}{The estimates of the probability mass at 0 and 1.}
   \item{Ahat:}{An estimate of the PIckands dependence function.}
   \item{w:}{A sequence of value on the bivariate unit simplex.}
   \item{q:}{A real in \eqn{[0,1]}{[0,1]} indicating the quantile associated with the threshold \code{u}. Takes value \code{NULL} if \code{type="maxima"}.}

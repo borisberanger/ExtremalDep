@@ -13,7 +13,7 @@
 
 \details{The first maximum is taken over the August 1961 to April 1962 period, and the last maximum is taken over the August 2010 to April 2011 period. The object \code{heatdata} contains the core of the data:
   \describe{
-    \item{vals}:}{A \eqn{50*90} matrix containing the \eqn{50} summer maxima at the \eqn{90} locations.}
+    \item{vals:}{A \eqn{50*90} matrix containing the \eqn{50} summer maxima at the \eqn{90} locations.}
     \item{sitesLL:}{A \eqn{90*2} matrix containing the sites locations in Latitude-Longitude, recentred (means have been substracted).}
     \item{sitesEN:}{A \eqn{90*2} matrix containing the sites locations in Eastings-Northings, recentred (means have been substracted).}
     \item{vals:}{A \eqn{50*90} matrix containing integers indicating the ``heatwave'' number of each of the \eqn{50} summer maxima at all \eqn{90} locations. Locations on the same row with the same integer indicates that they were obtained from the same heatwave. Heatwaves are defined over a three day window.}

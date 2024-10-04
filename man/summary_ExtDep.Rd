@@ -40,11 +40,11 @@ summary_ExtDep(object, mcmc, burn, cred=0.95, plot=FALSE, ...)
   \item{burn:}{The argument provided;}
   }
   If the margins were also fitted, the list given as \code{object} would contain \code{mar1} and \code{mar2} and the function would also output:
-  \itemize{
-  \item{\code{mar1.mean}, \code{mar1.up}, \code{mar1.low}: }{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the first component;}
-  \item{\code{mar2.mean}, \code{mar2.up}, \code{mar2.low}: }{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the second component;}
-  \item{\code{mar1_post}: }{Posterior sample for the estimated marginal parameter on the first component;}
-  \item{\code{mar2_post}: }{Posterior sample for the estimated marginal parameter on the second component;}  
+  \describe{
+  \item{mar1.mean, mar1.up, mar1.low:}{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the first component;}
+  \item{mar2.mean, mar2.up, mar2.low:}{Posterior mean, upper and lower bounds of the CI for the estimated marginal parameter on the second component;}
+  \item{mar1_post:}{Posterior sample for the estimated marginal parameter on the first component;}
+  \item{mar2_post: }{Posterior sample for the estimated marginal parameter on the second component;}  
   }
 }
 
