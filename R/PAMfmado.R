@@ -1,5 +1,4 @@
-library(cluster)
-PAMfmado.R <- function(x,K,J=0,threshold=.99,max.min=0){
+PAMfmado <- function(x,K,J=0,threshold=.99,max.min=0){
   #
   # Description 
   #   This function performs the PAM algorithm based on the F-madogram distance
@@ -14,7 +13,7 @@ PAMfmado.R <- function(x,K,J=0,threshold=.99,max.min=0){
   #                    J=0 means no resampling
   # 
   Nnb = ncol(x) 
-  Tnb =nrow(x)
+  Tnb = nrow(x)
   
   #--- DISTANCE MATRIX
   #--- F-MADOGRAM  
@@ -51,7 +50,8 @@ PAMfmado.R <- function(x,K,J=0,threshold=.99,max.min=0){
       DD = dist(t(V),method = "manhattan",diag = TRUE, upper = TRUE)/(2*Tnb)
       sil.vec[j]=pam(DD,K,diss = TRUE,medoids = NULL,keep.diss=FALSE,keep.data=FALSE)$silinfo$avg.width
     }
-    sil.final<<-quantile(sil.vec[sil.vec>0],probs=threshold)
+    sil.final = quantile(sil.vec[sil.vec>0],probs=threshold)
+    print("The quantile for resampling is ", sil.final, "\n", sep="")
   }
   
   return(output)

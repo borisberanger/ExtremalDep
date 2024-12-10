@@ -19,7 +19,7 @@ importFrom("stats", "df", "qf", "dnorm", "dt", "ecdf", "integrate", "optim",
            "pnorm", "pt", "quantile", "rnorm", "runif", "dunif", "uniroot",
            "var", "rpois", "dpois", "rbeta", "dbeta", "dnbinom", "pexp", 
 	       "qchisq", "pbeta", "qnorm", "cov", "rnbinom",  "approxfun", "dist", 
-	       "na.omit", "rexp", "density", "sample")
+	       "na.omit", "rexp", "density")
 importFrom("evd", "rbvevd", "abvnonpar", "amvnonpar", "pfrechet", "pgumbel", 
 	       "pgev", "abvevd", "hbvevd")
 importFrom("numDeriv", "jacobian", "hessian")
