@@ -43,7 +43,7 @@ Clustering rules: A comparison of partitioning and hierarchical clustering algor
 Philippe Naveau}
 
 \seealso{
-See the function  as \code{\link{cluster::pam}} in the package \code{cluster}
+See the function as \link[cluster:pam]{pam} in the package \code{cluster}
 }
 
 \examples{
