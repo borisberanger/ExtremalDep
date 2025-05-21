@@ -1,6 +1,6 @@
 export(angular, beed.boot, beed.confband, beed,
 	desn, pesn, dest, pest, dmesn, pmesn, dmest, pmest, 
-	dim_ExtDep, dExtDep, pExtDep, rExtDep,
+	dim_ExtDep, dExtDep, pExtDep, rExtDep, lambda.HR,
 	fExtDep, fExtDep.np, pFailure, trans2UFrechet, trans2GEV, dGEV, pGEV, qGEV, fGEV, 
 	madogram, rExtDepSpat, fExtDepSpat,
 	index.ExtDep, plot_ExtDep, plot_ExtDep.np,

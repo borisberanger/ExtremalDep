@@ -1,6 +1,6 @@
 Package: ExtremalDep
-Version: 0.0.4-4
-Date: 2024-12-17
+Version: 0.0.4-5
+Date: 2025-06-21
 Title: Extremal Dependence Models
 Authors@R: c(person("Boris","Beranger", role = "aut", email="borisberanger@gmail.com"),
 	    person("Simone","Padoan", role = c("cre","aut"), email="simone.padoan@unibocconi.it"),

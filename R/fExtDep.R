@@ -55,10 +55,10 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
     Ind <- apply(score, 1, function(x) any(x==0) || any(is.na(x))) # Indicate those wit 0s or NAs. Can happen when c !=0 and there are issues with the integral.
     K=var(score[!Ind,]); # variability matrix
     #J=-s; # sensitivity matrix
-    sJ = solve(J);
-    TIC = 2*matrix.trace(K %*% sJ * n)-2*LogLik; # TIC
-    #SE = diag(matrix.sqrt(solve((J %*% solve(K) %*% J)/n ))) # Standard errors
-    SE = diag(matrix.sqrt(sJ %*% K %*% sJ * n )) # Standard errors
+    sJ = chol2inv(chol(J));
+    KsJ <- K %*% sJ;
+    TIC = 2*matrix.trace(KsJ * n)-2*LogLik; # TIC
+    SE = diag(matrix.sqrt(sJ %*% KsJ * n )) # Standard errors
     
     return(list(par=round(param.est,sig), LL=round(LogLik,sig), 
                   TIC=round(TIC,sig), SE=round(SE,sig) ))
@@ -110,9 +110,10 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
     } 
     K=var(score); # variability matrix
     #J=-s; # sensitivity matrix
-    sJ = solve(J);
-    TIC = 2*matrix.trace(K %*% sJ * n)-2*est$value; # TIC
-    SE = diag(matrix.sqrt(sJ %*% K %*% sJ * n )) # Standard errors
+    sJ <- chol2inv(chol(J));
+    KsJ <- K %*% sJ;
+    TIC = 2*matrix.trace(KsJ * n)-2*est$value; # TIC
+    SE = diag(matrix.sqrt(sJ %*% KsJ * n )) # Standard errors
 
     return(list(par=round(est$par, sig), LL=round(est$value,sig),
                 SE=round(SE,sig), TIC=round(TIC,sig) ))      
@@ -148,7 +149,7 @@ matrix.sqrt <- function(A)
     return(sqrt(A))
   sva <- svd(A)
   if (min(sva$d)>=0)
-    Asqrt <- sva$u %*% diag(sqrt(sva$d)) %*% t(sva$v)
+    Asqrt <- sva$u %*% tcrossprod(diag(sqrt(sva$d)), sva$v)
   else
     stop("matrix square root is not defined")
   return(Asqrt)

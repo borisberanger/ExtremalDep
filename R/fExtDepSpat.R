@@ -1693,10 +1693,12 @@ fExtDepSpat <- function(model, z, sites, hit, jw, thresh, DoF, range, smooth, al
     }
     
     meat <- var(score)
-    Sand <- solve(bread) %*% meat %*% solve(bread) * nrow(z)
+    INVbread <- chol2inv(chol(bread))
+    meatINVbread <- meat %*% INVbread
+    Sand <- INVbread %*% meatINVbread * nrow(z)
     
     sand <- sqrt(diag(Sand))
-    TIC <- -2 * ( -xx$value - matrix.trace(meat %*% solve(bread) * nrow(z)) )
+    TIC <- -2 * ( -xx$value - matrix.trace(meatINVbread * nrow(z)) )
   }
   
   if(parallel){
@@ -2254,7 +2256,7 @@ vdfun_et <- function(z, sites, DoF, lambda, smooth, slst = list(1:d),
   
   # variances are one
   sigma <- rhomat 
-  isigma <- solve(sigma)
+  isigma <- chol2inv(chol(sigma))
   
   # calculates log(-V_{sv}) for log.p TRUE
   vsfun <- function(z, sites, sv = 1:d, log.p = TRUE) 
@@ -2274,10 +2276,9 @@ vdfun_et <- function(z, sites, DoF, lambda, smooth, slst = list(1:d),
     if(d != s) {
       tmp <- sigmaxx %*% isigmas 
       
-      Sig <- sigmaso - tmp %*% t(sigmaxx)
+      Sig <- sigmaso - tcrossprod(tmp, sigmaxx)
       if(any(diag(Sig)<=0)){return(-1e300)}
       Gam <- afun / (s + DoF) * makeSymmetric(Sig)
-      # Gam <- afun / (s + DoF) * makeSymmetric(sigmaso - tmp %*% t(sigmaxx))
       Eigen <- tryCatch(eigen(Gam)$values, error=function(e) -1) 
       if(any(Eigen<=0)){return(-1e300)}
       
@@ -4226,7 +4227,7 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
   
   # variances are one
   sigma <- rhomat 
-  isigma <- solve(sigma)
+  isigma <- chol2inv(chol(sigma))
   
   alphastar <- numeric(d)
   for(i in 1:d) {
@@ -4259,10 +4260,8 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
     sigmaxx <- sigma[-sv, sv, drop = FALSE]
     
     if(d != s) {
-      # alphabar <- as.numeric(alphas + isigmas %*% t(sigmaxx) %*% alphao /
-      #                          sqrt(1 + qf(alphao, solve(sigmaso - sigmaxx %*% isigmas %*% t(sigmaxx)))))
-      alphabar <- as.numeric( (alphas + isigmas %*% t(sigmaxx) %*% alphao) /
-                                sqrt(1 + qf(alphao, sigmaso - sigmaxx %*% isigmas %*% t(sigmaxx))))
+      alphabar <- as.numeric( (alphas + tcrossprod(isigmas, sigmaxx) %*% alphao) /
+                                sqrt(1 + qf(alphao, sigmaso - sigmaxx %*% crossprod(isigmas, sigmaxx))))
     } else {
       alphabar <- alpha
     }
@@ -4271,26 +4270,14 @@ vdfun_est <- function(z, sites, DoF, lambda, smooth, alpha, slst = list(1:d),
     # if sv is 1:d then mypmvt is taken as unity
     if(d != s) {
       tmp <- sigmaxx %*% isigmas 
-      Sig <- sigmaso - tmp %*% t(sigmaxx)
+      Sig <- sigmaso - tcrossprod(tmp, sigmaxx)
       if(any(diag(Sig)<=0)){return(-1e300)}
       Gam <- afun / (s + DoF) * makeSymmetric(Sig)
-      # Gam <- afun / (s + DoF) * makeSymmetric(sigmaso - tmp %*% t(sigmaxx))
       Eigen <- tryCatch(eigen(Gam)$values, error=function(e) -1) 
       if(any(Eigen<=0)){return(-1e300)}
-      #if(!isTRUE(all.equal(Gam, t(Gam)))){   # in case of rounding issues that make the covariance matrix not a covariance matrix
-      #  #warning("doing rounding of Gam matrix")
-      #  Gam <- round(Gam, abs( floor( log10(max(Gam - t(Gam))) ) )-2  )
-      #}
       mu <- as.numeric(tmp %*% zms^(1/DoF))
       alphavec <- alphao * sqrt((s + DoF)/afun) * sqrt(diag(Gam))
-      extval <- sqrt((s + DoF)/afun) * t(alphas + t(tmp) %*% alphao) %*% zms^(1/DoF) 
-      #p1 <- as.numeric(log(do.call(pfun, c(list(upper=zo^(1/DoF) - mu, sigma=Gam, df = DoF+s), args))))
-      # to avoid bug in mvtnorm (reported so should be fixed soon) NOW FIXED!
-      #if(length(zo)==1){
-      #  p1 <- as.numeric(log(do.call(pfun, c(list(upper=as.numeric((zmo^(1/DoF) - mu)/sqrt(Gam)), sigma=as.matrix(1), df = DoF+s, alpha = alphavec, ext = extval), args))))
-      #}else{
-      #  p1 <- as.numeric(log(do.call(pfun, c(list(upper=zmo^(1/DoF) - mu, sigma=Gam, df = DoF+s, alpha = alphavec, ext = extval), args)))) 
-      #}
+      extval <- sqrt((s + DoF)/afun) * crossprod(alphas + crossprod(tmp, alphao), zms^(1/DoF)) 
       p1 <- as.numeric(log(do.call(pfun, c(list(upper=zmo^(1/DoF) - mu, sigma=Gam, df = DoF+s, alpha = alphavec, ext = extval), args))))
       
     } else {

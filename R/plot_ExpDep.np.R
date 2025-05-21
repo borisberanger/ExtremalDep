@@ -352,8 +352,8 @@ plot_ExtDep.np <- function(out, type, summary.mcmc, burn, y, probs,
         if(n.cov1 != n.cov2){stop("QatCov1 and QatCov2 sould have the same dimensions")}
         if(n.cov1>3){stop("plot.ExtDep will display maximum 3 covariate levels")}
         
-        muhat1_post <- summary.mcmc$mar1_post[,1:(ncol(Cov1))] %*% t(Cov1) # A npost by nrow(Cov1) matrix
-        muhat2_post <- summary.mcmc$mar2_post[,1:(ncol(Cov2))] %*% t(Cov2) # A npost by nrow(Cov2) matrix
+        muhat1_post <- tcrossprod(summary.mcmc$mar1_post[,1:(ncol(Cov1))], Cov1) # A npost by nrow(Cov1) matrix
+        muhat2_post <- tcrossprod(summary.mcmc$mar2_post[,1:(ncol(Cov2))], Cov2) # A npost by nrow(Cov2) matrix
         sighat1_post <- summary.mcmc$mar1_post[,ncol(Cov1)+1]
         sighat2_post <- summary.mcmc$mar2_post[,ncol(Cov2)+1]  
         gamhat1_post <- summary.mcmc$mar1_post[,ncol(Cov1)+2]

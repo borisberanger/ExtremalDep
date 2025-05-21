@@ -18,4 +18,13 @@ A set of procedures for parametric and non-parametric modelling of the dependenc
 # Version 0.0.4-4 updates:
 
 - Fixes resetting graphical parameters in `plot_ExtDep.np()` when `type = "Qsets"`;
-- Replaces `closeAllConnections()` by `stopCluster()` in `fExtDepSpat()`,
+- Replaces `closeAllConnections()` by `stopCluster()` in `fExtDepSpat()`.
+
+# Version 0.0.4-5 updates:
+
+- improvement to `dExtDep()` function when `model="HR"` and `"ET"`;
+- new `lambda.hr()` function that can be used to define the parameters of the trivariate Husler-Reiss model. Given two parameters, a range for the third parameter is provided to ensure positive definite matrices in the exponent function;
+- improve efficiency when manipulating matrices:
+	- `t(A) %*% B` is replaced by `crossprod(A,B)` (and vice versa);
+	- `solve(A)` is replaced by `chol2inv(chol(A))`;
+	- `t(x) %*% solve(A) %*% x` is replaced by `sum(forwardsolve(t(chol(A)),x))`;
