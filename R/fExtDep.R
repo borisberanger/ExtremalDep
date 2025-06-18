@@ -1,5 +1,5 @@
-fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
-                       optim.method = "BFGS", trace = 0, sig = 3,
+fExtDep <- function(x, method="PPP", model, par.start = NULL, c = 0,
+                       optim.method = "BFGS", trace = 0,
                        Nsim, Nbin = 0, Hpar, MCpar, seed = NULL
                        ){
   
@@ -22,11 +22,11 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
   
     if(model == "AL" && c==0 && length(par.start)==4){ # 3-dimensional AL model with only parameters for the interior
       optimfun <- function(para){
-        return(dExtDep(x=data, method="Parametric", model=model, par=c(rep(1,3), para[1], rep(0,6), para[2:4]), angular=TRUE, log=TRUE, c=c, vectorial=FALSE))
+        return(dExtDep(x=x, method="Parametric", model=model, par=c(rep(1,3), para[1], rep(0,6), para[2:4]), angular=TRUE, log=TRUE, c=c, vectorial=FALSE))
       }
     }else{
       optimfun <- function(para){
-        return(dExtDep(x=data, method="Parametric", model=model, par=para, angular=TRUE, log=TRUE, c=c, vectorial=FALSE))
+        return(dExtDep(x=x, method="Parametric", model=model, par=para, angular=TRUE, log=TRUE, c=c, vectorial=FALSE))
       }  
     }
     
@@ -36,15 +36,15 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
     param.est <- est.para$par # Parameters estimates
     J <- -est.para$hessian
 
-    n <- nrow(data)
+    n <- nrow(x)
     #s <- 0
     score <- matrix(nrow=n,ncol=length(param.est))
     for(i in 1:n){
       stepJ <- function(para){
         if(model == "AL" && c==0 && length(par.start)==4){
-          dExtDep(x=data[i,], method="Parametric", model=model, par=c(rep(1,3), para[1], rep(0,6), para[2:4]), angular=TRUE, log=TRUE, c=c, vectorial=FALSE)
+          dExtDep(x=x[i,], method="Parametric", model=model, par=c(rep(1,3), para[1], rep(0,6), para[2:4]), angular=TRUE, log=TRUE, c=c, vectorial=FALSE)
         }else{
-          dExtDep(x=data[i,], method="Parametric", model=model, par=para, angular=TRUE, log=TRUE, c=c, vectorial=FALSE)  
+          dExtDep(x=x[i,], method="Parametric", model=model, par=para, angular=TRUE, log=TRUE, c=c, vectorial=FALSE)  
         }
       }
       #score[i,] = numDeriv::jacobian(stepJ,param.est)
@@ -60,15 +60,16 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
     TIC = 2*matrix.trace(KsJ * n)-2*LogLik; # TIC
     SE = diag(matrix.sqrt(sJ %*% KsJ * n )) # Standard errors
     
-    return(list(par=round(param.est,sig), LL=round(LogLik,sig), 
-                  TIC=round(TIC,sig), SE=round(SE,sig) ))
+    out <- list(model=model, par=param.est, LL=LogLik, 
+                TIC=TIC, SE=SE, data=x )
+    class(out) <- "ExtDep_Freq"
 
   }
   if(method == "BayesianPPP"){
-    fit <- posteriorMCMC(Nsim = Nsim, Nbin = Nbin, Hpar = Hpar, MCpar = MCpar, 
-                  dat = data, par.start = par.start, seed = seed, 
+    out <- posteriorMCMC(Nsim = Nsim, Nbin = Nbin, Hpar = Hpar, MCpar = MCpar, 
+                  dat = x, par.start = par.start, seed = seed, 
                   model = model, c = c)
-    return(fit)
+    class(out) <- "ExtDep_Bayes"
   }
   if( method == "Composite"){
     
@@ -92,20 +93,20 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
       
     }
     
-    est <- optim(par.start, biv.cllik, data=data, model=model, method=optim.method, hessian=TRUE, control = list(maxit = 1e8, trace = trace, fnscale=-1)) 	
+    est <- optim(par.start, biv.cllik, data=x, model=model, method=optim.method, hessian=TRUE, control = list(maxit = 1e8, trace = trace, fnscale=-1))   
     
-    n <- nrow(data)
+    n <- nrow(x)
     #s <- 0
     J <- -est$hessian
     
     score <- matrix(nrow=n, ncol=length(est$par))
     for(i in 1:n){
       stepJ <- function(para){
-        biv.cllik(par=para, data=data[i,], model=model)
+        biv.cllik(par=para, data=x[i,], model=model)
       }
       #score[i,] = numDeriv::jacobian(stepJ, est$par)
       score[i,] =  fdjacobian(fun=stepJ, par=est$par, split=FALSE, epsVec=rep(0.005, length(est$par)))
-      #s = s + numDeriv::hessian(stepJ, est$par)	
+      #s = s + numDeriv::hessian(stepJ, est$par)  
       
     } 
     K=var(score); # variability matrix
@@ -115,11 +116,97 @@ fExtDep <- function(method="PPP", data, model, par.start = NULL, c = 0,
     TIC = 2*matrix.trace(KsJ * n)-2*est$value; # TIC
     SE = diag(matrix.sqrt(sJ %*% KsJ * n )) # Standard errors
 
-    return(list(par=round(est$par, sig), LL=round(est$value,sig),
-                SE=round(SE,sig), TIC=round(TIC,sig) ))      
-  }  
+    out <- list(model=model, par=est$par, LL=est$value,
+                SE=SE, TIC=TIC, data=x)
+    class(out) <- "ExtDep_Freq"
 
+  }  
+  return(out)
 }
+
+est <- function(x, ...) {
+  UseMethod("est")
+}
+
+model <- function(x, ...) {
+  UseMethod("model")
+}
+
+
+method <- function(x, ...) {
+  UseMethod("method")
+}
+
+
+bic <- function(x, ...) {
+  UseMethod("bic")
+}
+
+
+tic <- function(x, ...) {
+  UseMethod("tic")
+}
+
+est.ExtDep_Bayes <- function(x, digits=3){
+  # x is an object of class "ExtDep_Bayes"
+  return(round(x$emp.mean,digits))
+}
+
+stderr.ExtDep_Bayes <- function(x, digits=3){
+  # x is an object of class "ExtDep_Bayes"
+  return(round(x$emp.sd,digits))
+}
+
+model.ExtDep_Bayes <- function(x){
+  # x is an object of class "ExtDep_Bayes"
+  return(x$model)
+}
+
+method.ExtDep_Bayes <- function(x){
+  # x is an object of class "ExtDep_Bayes"
+  return("Bayesian model averaging")
+}  
+
+bic.ExtDep_Bayes <- function(x, digits=3){
+  # x is an object of class "ExtDep_Bayes"
+  return(x$BIC)
+}
+
+est.ExtDep_Freq <- function(x, digits=3){
+  # x is an object of class "ExtDep_Freq"
+  return(round(x$par,digits))
+}
+
+logLik.ExtDep_Freq <- function(x, digits=3){
+  # x is an object of class "ExtDep_Freq"
+  return(round(x$LL, digits))
+}
+
+stderr.ExtDep_Freq <- function(x, digits=3){
+  # x is an object of class "ExtDep_Freq"
+  return(round(x$SE, digits))
+}
+
+model.ExtDep_Freq <- function(x){
+  # x is an object of class "ExtDep_Freq"
+  return(x$model)
+}
+
+tic.ExtDep_Freq <- function(x, digits=3){
+  # x is an object of class "ExtDep_Freq"
+  return(round(x$TIC,digits))
+}
+
+method.ExtDep_Freq <- function(x){
+  # x is an object of class "ExtDep_Freq"
+  if(all(rowSums(x$data)==1)){
+      method <- "Poisson Point Process"
+    }else{
+      method <- "Pairwise composite likelihood"
+    }
+  return(method)
+}
+
 
 ###############################################################################
 ###############################################################################
@@ -757,11 +844,11 @@ posteriorMCMC <- function (
   #BIC <- -2*dExtDep(x=dat, method="Parametric", model=model, par=mean.res, angular=TRUE, c=c, log=TRUE, vectorial=FALSE)+length(mean.res)*(log(nrow(dat))+log(2*pi))
   BIC <- -2*ll.fun(para=mean.res, model=model, c=c)+length(mean.res)*(log(nrow(dat))+log(2*pi))
   
-  res <- list(stored.vals = stored.vals, llh = llh, lprior = lprior, 
+  res <- list(model=model, stored.vals = stored.vals, llh = llh, lprior = lprior, 
               arguments = arglist, elapsed = end.time - start.time, 
               Nsim = Nsim, Nbin = Nbin, n.accept = n.accept, n.accept.kept = n.accept.kept, 
-              emp.mean = mean.res, emp.sd = sqrt(emp.variance), BIC = BIC)
-  class (res) <- "postsample"
+              emp.mean = mean.res, emp.sd = sqrt(emp.variance), BIC = BIC, data=dat, model=model)
+  # class (res) <- "postsample"
   
   return(res)
 }
