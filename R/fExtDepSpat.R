@@ -251,12 +251,15 @@ fExtDepSpat <- function(x, model, sites, hit, jw, thresh, DoF, range, smooth, al
   ### Parallelisation
   if(parallel){
     if(missing(ncores)){
-      message("'ncores' must be specified, setting it to 4 by default")
-      ncores <- 4
+      ncores <- parallel::detectCores(logical = FALSE)-1
+      message(paste("'ncores' must be specified, setting it to ", ncores ,"\n", sep=""))
     }
     
     cl <- makeCluster(ncores, type="PSOCK")
     registerDoParallel(cl)
+
+    on.exit({try(parallel::stopCluster(cl), silent = TRUE)}, add = TRUE)
+
   }
   
   if(model == "ET"){
@@ -1705,7 +1708,7 @@ fExtDepSpat <- function(x, model, sites, hit, jw, thresh, DoF, range, smooth, al
   
   if(parallel){
     gc()
-    closeAllConnections()
+    # closeAllConnections()
   }
  
   if(jw < Ns){
