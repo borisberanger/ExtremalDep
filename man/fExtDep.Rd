@@ -17,7 +17,7 @@ fExtDep(x, method="PPP", model, par.start = NULL,
                            cex.dat=1, cex.lab=1, cex.cont=1, Q.fix, Q.range, 
                            Q.range0, cond=FALSE,...)        
         
-\method{logLik}{ExtDep_Freq} (x, digits=3)
+\method{logLik}{ExtDep_Freq} (object, digits=3)
 
 \method{plot}{ExtDep_Bayes} (x, type, log=TRUE, contour=TRUE, style, labels, 
                             cex.dat=1, cex.lab=1, cex.cont=1, Q.fix, Q.range, 

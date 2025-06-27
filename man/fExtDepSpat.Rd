@@ -11,7 +11,7 @@ fExtDepSpat(x, model, sites, hit, jw, thresh, DoF, range, smooth,
             seed=123, method = "BFGS", sandwich=TRUE,
             control = list(trace=1, maxit=50, REPORT=1, reltol=0.0001))
             
-\method{logLik}{ExtDep_Spat} (x, digits=3)
+\method{logLik}{ExtDep_Spat} (object, digits=3)
 }
 
 \arguments{

@@ -56,18 +56,18 @@ plot.ExtDep_npBayes <- function(x, type, summary.mcmc, burn, y, probs,
       ylab <- expression(y[2])
     }   
 
-    plot.returns(y=y, probs=probs, CEX=CEX, labels=c(xlab, ylab), data=data)
+    plot_returns(y=y, probs=probs, CEX=CEX, labels=c(xlab, ylab), data=data)
   }else if(type == "A"){
     if(!missing(A_true)){
       fbplot_A(A_post=summary.mcmc$A_post, A_true, wgrid=summary.mcmc$w, CEX=CEX)
     }else{
-      plot.A(w=w[,1], summary.mcmc=summary.mcmc, CEX=CEX, ...)
+      plot_A(w=w[,1], summary.mcmc=summary.mcmc, CEX=CEX, ...)
     }
   }else if(type == "h"){
     if(!missing(h_true)){
       fbplot_h(pmcmc=summary.mcmc, h_true, wgrid=summary.mcmc$w, CEX=CEX)
     }else{
-      plot.h(w=w[,1], summary.mcmc=summary.mcmc, CEX=CEX, ...)
+      plot_h(w=w[,1], summary.mcmc=summary.mcmc, CEX=CEX, ...)
     }
   }else if(type == "pm"){
     PriorVSPosterior.pm(mcmc=x, nsim=nsim, burn=burn, CEX=CEX, ...)
@@ -78,9 +78,9 @@ plot.ExtDep_npBayes <- function(x, type, summary.mcmc, burn, y, probs,
                    oma = c(0, 0, 0, 0), mgp = c(1, 1, 0), cex.axis=CEX)
     on.exit(par(oldpar1))
     
-    plot.A(w=w[,1], summary.mcmc=summary.mcmc, ...)
+    plot_A(w=w[,1], summary.mcmc=summary.mcmc, ...)
     PriorVSPosterior.k(mcmc=x, nsim=nsim, burn=burn, ...)
-    plot.h(w=w[,1], summary.mcmc=summary.mcmc, ...)
+    plot_h(w=w[,1], summary.mcmc=summary.mcmc, ...)
     PriorVSPosterior.pm(mcmc=x, nsim=nsim, burn=burn, ...)
   }else if(type == "Qsets"){
     
@@ -150,16 +150,16 @@ plot.ExtDep_npFreq <- function(x, type, est.out, mar1, mar2, dep, P, CEX=1.5,
   }
   
   if(type == "A"){
-    plot.A.F(obj=x, CEX=CEX, ...)
+    plot_A_F(obj=x, CEX=CEX, ...)
   }else if(type == "h"){
-    plot.h.F(obj=x, CEX=CEX, ...)
+    plot_h_F(obj=x, CEX=CEX, ...)
   }else if(type == "summary"){
     oldpar1 <- par(mfrow=c(1,2), pty='s', mar = c(2, 4.25, 0.25, 0.25), 
                    oma = c(0, 0, 0, 0), mgp = c(1, 1, 0), cex.axis=CEX)
     on.exit(par(oldpar1))
     
-    plot.A.F(obj=x, CEX=CEX, ...)
-    plot.h.F(obj=x, CEX=CEX, ...)
+    plot_A_F(obj=x, CEX=CEX, ...)
+    plot_h_F(obj=x, CEX=CEX, ...)
   }else if(type == "Qsets"){
     
     if(missing(col.data)) col.data <- NULL
@@ -185,16 +185,16 @@ plot.ExtDep_npEmp <- function(x, type, est.out, mar1, mar2, dep, P, CEX=1.5,
   # x is an object of class ExtDep_npEmp
             
   if(type == "psi"){
-    plot.psi(obj=x, CEX=CEX, ...)
+    plot_psi(obj=x, CEX=CEX, ...)
   }else if(type == "h"){
-    plot.h.E(obj=x, CEX=CEX, ...)
+    plot_h_E(obj=x, CEX=CEX, ...)
   }else if(type == "summary"){
     oldpar1 <- par(mfrow=c(1,2), pty='s', mar = c(2, 4.25, 0.25, 0.25), 
                    oma = c(0, 0, 0, 0), mgp = c(1, 1, 0), cex.axis=CEX)
     on.exit(par(oldpar1))
     
-    plot.psi(obj=x, CEX=CEX, ...)
-    plot.h.E(obj=x, CEX=CEX, ...)
+    plot_psi(obj=x, CEX=CEX, ...)
+    plot_h_E(obj=x, CEX=CEX, ...)
   }else if(type == "Qsets"){
     if(missing(col.data)) col.data <- NULL
     if(missing(col.Qfull)) col.Qfull <- NULL
@@ -353,7 +353,7 @@ summary.ExtDep_npBayes <- function(object, w, burn, cred=0.95, plot=FALSE, ...) 
 #          returns values                                                    ###
 ################################################################################ 
   
-plot.returns <- function(y, probs, CEX=1.5,
+plot_returns <- function(y, probs, CEX=1.5,
                          labels=c(expression(y[1]),expression(y[2])), data=NULL, ...){
   
   op1 <- par(mar = c(1, 1, 0, 0), oma = c(3, 4, 0.5, 0.5), mgp = c(1, 1, 0), cex.axis=CEX)
@@ -388,7 +388,7 @@ plot.returns <- function(y, probs, CEX=1.5,
 # summary.mcmc is the output obtained with summary.bbeed function            ###
 ################################################################################ 
 
-plot.A <- function(w, summary.mcmc, CEX=1.5, ...){
+plot_A <- function(w, summary.mcmc, CEX=1.5, ...){
   # summary.mcmc = output PostMCMC
   op3 <- par(cex.axis=CEX)
   on.exit(par(op3))
@@ -438,7 +438,7 @@ fbplot_A <- function(A_post, A_true, wgrid, CEX=1.5){
 # summary.mcmc is the output obtained with summary.bbeed function            ###
 ################################################################################ 
 
-plot.h <- function(w, summary.mcmc, CEX=1.5, ...){ 
+plot_h <- function(w, summary.mcmc, CEX=1.5, ...){ 
   
   # summary.mcmc = output summary.mcmc
   # pm = theorethical point masses, zero by default
@@ -818,7 +818,7 @@ Plot.Qset <- function(mcmc, nsim, burn, kn,  summary.mcmc, est.out,
 #################################################
 #################################################
 
-plot.A.F <- function(obj, CEX=1.5, ...){
+plot_A_F <- function(obj, CEX=1.5, ...){
 
   op3 <- par(cex.axis=CEX)
   on.exit(par(op3))
@@ -831,7 +831,7 @@ plot.A.F <- function(obj, CEX=1.5, ...){
   mtext('A(t)',side=2,line=3,cex=CEX)
 }
 
-plot.h.F <- function(obj, CEX=1.5, ...){ 
+plot_h_F <- function(obj, CEX=1.5, ...){ 
   
   # pm = theorethical point masses, zero by default
   op5 <- par(cex.axis=CEX)
@@ -983,7 +983,7 @@ Plot.Qset.F <- function(obj, mar1, mar2, dep=TRUE, est.out=FALSE, P,
 ################################################
 ################################################
 
-plot.psi <- function(obj, CEX=1.5, ...){
+plot_psi <- function(obj, CEX=1.5, ...){
     
   op3 <- par(cex.axis=CEX)
   on.exit(par(op3))
@@ -996,7 +996,7 @@ plot.psi <- function(obj, CEX=1.5, ...){
   mtext(expression(psi(theta)),side=2,line=3,cex=CEX)
 }
 
-plot.h.E <- function(obj, CEX=1.5, ...){ 
+plot_h_E <- function(obj, CEX=1.5, ...){ 
   
   op5 <- par(cex.axis=CEX)
   on.exit(par(op5))
