@@ -11,15 +11,12 @@ fExtDepSpat(x, model, sites, hit, jw, thresh, DoF, range, smooth,
             seed=123, method = "BFGS", sandwich=TRUE,
             control = list(trace=1, maxit=50, REPORT=1, reltol=0.0001))
             
-\method{logLik}{ExtDep_Spat} (object, digits=3)
+\method{logLik}{ExtDep_Spat} (object, ...)
 }
 
 \arguments{
-  \item{x}{
-\code{fExtDepSpat}: A \eqn{(n \times d)}{(n x d)} matrix containing \eqn{n}{n} observations at \eqn{d}{d} locations.
-
-\code{logLik} method function: an object of class \code{ExtDep_Spat}.
-}
+  \item{x}{A \eqn{(n \times d)}{(n x d)} matrix containing \eqn{n}{n} observations at \eqn{d}{d} locations (\code{fExtDepSpat}).}
+  \item{object}{an object of class \code{ExtDep_Spat} (\code{logLik}).}
 	\item{model}{A character string indicating the max-stable model, currently extremal-t (\code{"ET"}) and extremal skew-t (\code{"EST"}) only available. Note that the Schlather model can be obtained as a special case by specifying the extremal-t model with \code{DoF=1}}
 	\item{sites}{A \eqn{(d \times 2)}{(d x 2)} matrix corresponding to the coordinates of locations where the processes is simulated. Each row corresponds to a location.}
 	\item{hit}{A \eqn{(n \times d)}{(n x d)} matrix containing the hitting scenarios for each observations.}
@@ -39,6 +36,7 @@ fExtDepSpat(x, model, sites, hit, jw, thresh, DoF, range, smooth,
 	\item{sandwich}{A logical value; if \code{TRUE} the standard errors of the estimates are computed from the Sandwich (Godambe) information matrix.}
 	\item{control}{A list of control parameter for the optimisation. See \code{\link{optim}} for more details.}
 	\item{digits}{Integer indicating the number of decimal places to be reported.}
+	\item{...}{For the \code{logLik()} function: can provide a \code{digits} argument.}
 }
 
 \details{

@@ -120,14 +120,29 @@ StdErr <- function(x, digits=3){
 #   return(out)
 # }
 
-logLik.ExtDep_Freq <- function(object, digits=3){
+logLik.ExtDep_Freq <- function(object, ...){
   # object is an object of class "ExtDep_Freq"
-  return(round(object$LL, digits))
+
+  args <- list(...)
+  if ("digits" %in% names(args)) {
+   out <- round(object$LL, digits)
+  }else{
+   out <- object$LL
+  }
+
+  return(out)
 }
 
-logLik.ExtDep_Spat <- function(object, digits=3){
+logLik.ExtDep_Spat <- function(object, ...){
   # object is an object of class "ExtDep_Spat"
-  return(round(object$LL, digits))
+  args <- list(...)
+  if ("digits" %in% names(args)) {
+   out <- round(object$LL, digits)
+  }else{
+   out <- object$LL
+  }
+
+  return(out)
 }
 
 

@@ -17,7 +17,7 @@ fExtDep(x, method="PPP", model, par.start = NULL,
                            cex.dat=1, cex.lab=1, cex.cont=1, Q.fix, Q.range, 
                            Q.range0, cond=FALSE,...)        
         
-\method{logLik}{ExtDep_Freq} (object, digits=3)
+\method{logLik}{ExtDep_Freq} (object, ...)
 
 \method{plot}{ExtDep_Bayes} (x, type, log=TRUE, contour=TRUE, style, labels, 
                             cex.dat=1, cex.lab=1, cex.cont=1, Q.fix, Q.range, 
@@ -30,9 +30,13 @@ fExtDep(x, method="PPP", model, par.start = NULL,
   \item{x}{
 \code{fExtDep.np}: A matrix containing the data.
 
-\code{logLik} and \code{plot} method functions: any object returned by \code{fExtDep}.
+\code{plot} method functions: any object returned by \code{fExtDep}.
 }
-  \item{object}{A list object of class \code{ExtDep_Bayes}.}
+  \item{object}{
+\code{summary.ExtDep_Bayes} method function: A list object of class \code{ExtDep_Bayes}.
+  
+\code{logLik} method function: any object returned by \code{fExtDep}.
+}
 	\item{method}{A character string indicating the estimation method inlcuding \code{"PPP"}, \code{"BayesianPPP"} and \code{"Composite"}.}
 	\item{model}{A character string with the name of the model. When \code{method="PPP"} or \code{"BayesianPPP"}, this includes \code{"PB"}, \code{"HR"}, \code{"ET"}, \code{"EST"}, \code{TD} and \code{AL} whereas when \code{method="composite"} it is restricted to \code{"HR"}, \code{"ET"} and \code{"EST"}.}
 	\item{par.start}{A vector representing the initial parameters values for the optimization algorithm.}
@@ -63,7 +67,7 @@ fExtDep(x, method="PPP", model, par.start = NULL,
   \item{cred}{A probability indicating the coverage of the credible interval.}
   \item{plot}{A logical value. If \code{TRUE} kernel density plots of the posterior distribution of each parameter is displayed.}
   \item{digits}{Integer indicating the number of decimal places to be reported.}
-  \item{...}{Additional graphical arguments for the \code{plot} method functions: \code{hist()} function when \code{type="angular"} with \code{style="hist"}, and \code{plot()} and \code{contour()} functions when \code{type="returns"}. For the \code{summary} method function: additional parameters to the \code{density()} function.}
+  \item{...}{Additional graphical arguments for the \code{plot} method functions: \code{hist()} function when \code{type="angular"} with \code{style="hist"}, and \code{plot()} and \code{contour()} functions when \code{type="returns"}. For the \code{summary} method function: additional parameters to the \code{density()} function. For the \code{logLik()} function: can provide a \code{digits} argument.}
 }
 
 \details{
