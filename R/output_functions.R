@@ -125,7 +125,7 @@ logLik.ExtDep_Freq <- function(object, ...){
 
   args <- list(...)
   if ("digits" %in% names(args)) {
-   out <- round(object$LL, digits)
+   out <- round(object$LL, args$digits)
   }else{
    out <- object$LL
   }
@@ -137,7 +137,7 @@ logLik.ExtDep_Spat <- function(object, ...){
   # object is an object of class "ExtDep_Spat"
   args <- list(...)
   if ("digits" %in% names(args)) {
-   out <- round(object$LL, digits)
+   out <- round(object$LL, args$digits)
   }else{
    out <- object$LL
   }
