@@ -35,8 +35,7 @@ fExtDepSpat(x, model, sites, hit, jw, thresh, DoF, range, smooth,
 	\item{method}{A character string indicating the optimisation method to be used. See \code{\link{optim}} for more details.}
 	\item{sandwich}{A logical value; if \code{TRUE} the standard errors of the estimates are computed from the Sandwich (Godambe) information matrix.}
 	\item{control}{A list of control parameter for the optimisation. See \code{\link{optim}} for more details.}
-	\item{digits}{Integer indicating the number of decimal places to be reported.}
-	\item{...}{For the \code{logLik()} function: can provide a \code{digits} argument.}
+	\item{...}{For the \code{logLik()} function: can provide a \code{digits} argument, an integer indicating the number of decimal places to be reported.}
 }
 
 \details{

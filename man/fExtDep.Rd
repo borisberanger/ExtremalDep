@@ -66,8 +66,7 @@ fExtDep(x, method="PPP", model, par.start = NULL,
   
   \item{cred}{A probability indicating the coverage of the credible interval.}
   \item{plot}{A logical value. If \code{TRUE} kernel density plots of the posterior distribution of each parameter is displayed.}
-  \item{digits}{Integer indicating the number of decimal places to be reported.}
-  \item{...}{Additional graphical arguments for the \code{plot} method functions: \code{hist()} function when \code{type="angular"} with \code{style="hist"}, and \code{plot()} and \code{contour()} functions when \code{type="returns"}. For the \code{summary} method function: additional parameters to the \code{density()} function. For the \code{logLik()} function: can provide a \code{digits} argument.}
+  \item{...}{Additional graphical arguments for the \code{plot} method functions: \code{hist()} function when \code{type="angular"} with \code{style="hist"}, and \code{plot()} and \code{contour()} functions when \code{type="returns"}. For the \code{summary} method function: additional parameters to the \code{density()} function. For the \code{logLik()} function: can provide a \code{digits} argument, an integer indicating the number of decimal places to be reported.}
 }
 
 \details{
