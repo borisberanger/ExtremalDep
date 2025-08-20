@@ -1,0 +1,6 @@
+styler::tidyverse_style(strict = TRUE) %>%
+  styler::add_style_rule(styler::style_guide_deactivate_rules(c(
+    "object_name_linter",   # don't change variable/function names
+    "function_name_linter",
+    "snake_case_linter"
+  )))
