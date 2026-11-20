@@ -27,7 +27,7 @@ extern void pmesn(void *, void *, void *, void *, void *);
 extern void pmesn3(void *, void *, void *, void *, void *);
 extern void pmest(void *, void *, void *, void *, void *);
 extern void pmest3(void *, void *, void *, void *, void *);
-extern void doCubature(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP doCubature(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 /*----------------------------------------------------------------
 File name: CompRandFld.c
